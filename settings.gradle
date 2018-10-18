@@ -16,5 +16,6 @@ pluginManagement {
     }
 }
 rootProject.name = 'KtorDemo'
+enableFeaturePreview('GRADLE_METADATA')
 
 include ':app'

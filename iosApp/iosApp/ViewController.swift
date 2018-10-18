@@ -5,6 +5,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         label.text = Proxy().proxyHello()
+        SampleKt.webcall()
     }
 
     override func didReceiveMemoryWarning() {

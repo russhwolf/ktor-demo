@@ -18,5 +18,6 @@ class MainActivity : AppCompatActivity() {
         hello()
         Sample().checkMe()
         setContentView(R.layout.activity_main)
+        webcall()
     }
 }

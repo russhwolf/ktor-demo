@@ -82,6 +82,7 @@ kotlin {
                 implementation "io.ktor:ktor-client-apache:$ktor_version"
                 implementation "io.ktor:ktor-client-core-jvm:$ktor_version"
                 implementation "io.ktor:ktor-client-gson:$ktor_version"
+                implementation "io.ktor:ktor-client-mock:$ktor_version"
             }
         }
         iosMain {
