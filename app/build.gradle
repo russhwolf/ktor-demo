@@ -4,8 +4,9 @@ plugins {
 repositories {
     google()
     jcenter()
-    maven { url 'http://dl.bintray.com/kotlin/kotlin-eap' }
-    mavenCentral()
+    maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
+    maven { url 'https://dl.bintray.com/kotlin/kotlinx' }
+    maven { url 'https://dl.bintray.com/kotlin/ktor' }
 }
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android-extensions'
@@ -44,31 +45,58 @@ kotlin {
         }
     }
     sourceSets {
+        def ktor_version = "1.0.0-beta-1"
+
         commonMain {
             dependencies {
                 implementation 'org.jetbrains.kotlin:kotlin-stdlib-common'
+
+                implementation "io.ktor:ktor-client-core:$ktor_version"
+                implementation "io.ktor:ktor-client-json:$ktor_version"
             }
         }
         commonTest {
             dependencies {
-        		implementation 'org.jetbrains.kotlin:kotlin-test-common'
-        		implementation 'org.jetbrains.kotlin:kotlin-test-annotations-common'
+                implementation 'org.jetbrains.kotlin:kotlin-test-common'
+                implementation 'org.jetbrains.kotlin:kotlin-test-annotations-common'
+
+                implementation "io.ktor:ktor-client-core:$ktor_version"
+                implementation "io.ktor:ktor-client-json:$ktor_version"
+                implementation "io.ktor:ktor-client-mock:$ktor_version"
             }
         }
         androidMain {
             dependencies {
                 implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
+
+                implementation "io.ktor:ktor-client-android:$ktor_version"
+                implementation "io.ktor:ktor-client-core-jvm:$ktor_version"
+                implementation "io.ktor:ktor-client-gson:$ktor_version"
             }
         }
         androidTest {
             dependencies {
                 implementation 'org.jetbrains.kotlin:kotlin-test'
                 implementation 'org.jetbrains.kotlin:kotlin-test-junit'
+
+                implementation "io.ktor:ktor-client-apache:$ktor_version"
+                implementation "io.ktor:ktor-client-core-jvm:$ktor_version"
+                implementation "io.ktor:ktor-client-gson:$ktor_version"
             }
         }
         iosMain {
+            dependencies {
+                implementation "io.ktor:ktor-client-ios:$ktor_version"
+                implementation "io.ktor:ktor-client-core-ios:$ktor_version"
+                implementation "io.ktor:ktor-client-json-ios:$ktor_version"
+            }
         }
         iosTest {
+            dependencies {
+                implementation "io.ktor:ktor-client-ios:$ktor_version"
+                implementation "io.ktor:ktor-client-core-ios:$ktor_version"
+                implementation "io.ktor:ktor-client-json-ios:$ktor_version"
+            }
         }
     }
 }
@@ -93,4 +121,23 @@ task copyFramework {
             include 'app.framework.dSYM'
         }
     }
+}
+
+// Run ios tests on simulator
+task iosTest {
+    def device = project.findProperty("iosDevice")?.toString() ?: "iPhone 8"
+    dependsOn 'linkTestDebugExecutableIos'
+    group = JavaBasePlugin.VERIFICATION_GROUP
+    description = "Runs tests for target 'ios' on an iOS simulator"
+
+    doLast {
+        def binary = kotlin.targets.ios.compilations.test.getBinary('EXECUTABLE', 'DEBUG')
+        exec {
+            commandLine 'xcrun', 'simctl', 'spawn', device, binary.absolutePath
+        }
+    }
+}
+
+afterEvaluate { project ->
+    project.tasks['test'].dependsOn iosTest
 }

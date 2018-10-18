@@ -1,5 +1,7 @@
 package sample
 
+import io.ktor.client.HttpClient
+
 expect class Sample() {
     fun checkMe(): Int
 }
@@ -16,4 +18,9 @@ class Proxy {
 
 fun main(args: Array<String>) {
     println(hello())
+}
+
+suspend fun webcall() {
+    val ip = KtorClient(HttpClient()).getIp().ip
+    println("ip = $ip")
 }
