@@ -45,7 +45,7 @@ kotlin {
         }
     }
     sourceSets {
-        def ktor_version = "1.0.0-beta-1"
+        def ktor_version = "1.0.0-beta-2"
 
         commonMain {
             dependencies {
