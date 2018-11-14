@@ -1,7 +1,7 @@
 package sample
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 
 actual class Sample {
     actual fun checkMe() = 44

@@ -1,7 +1,5 @@
 package sample
 
-import io.ktor.client.HttpClient
-import io.ktor.client.features.json.JsonFeature
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -24,6 +22,6 @@ fun main(args: Array<String>) {
 }
 
 fun webcall() = GlobalScope.launch(ApplicationDispatcher) {
-    val ip = KtorClient(HttpClient { install(JsonFeature )}).getIp().ip
+    val ip = KtorClient(httpClientEngine).getIp().ip
     println("ip = $ip")
 }
