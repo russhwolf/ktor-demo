@@ -36,14 +36,11 @@ dependencies {
 }
 
 kotlin {
-    def iosDevice = System.getenv('SDK_NAME')?.startsWith("iphoneos")
-    
-    
     targets {
         fromPreset(presets.android, 'android')
         // This preset is for iPhone emulator
         // Switch here to presets.iosArm64 (or iosArm32) to build library for iPhone device
-        def iosTarget = iosDevice ? presets.iosArm64 : presets.iosX64
+        def iosTarget = System.getenv('SDK_NAME')?.startsWith("iphoneos") ? presets.iosArm64 : presets.iosX64
         fromPreset(iosTarget, 'ios') {
             compilations.main.outputKinds('FRAMEWORK')
         }
@@ -52,7 +49,6 @@ kotlin {
         def ktor_version = "1.1.1"
         def coroutine_version = "1.1.0"
         def serialization_version = "0.9.1"
-        def iosSuffix = iosDevice ? 'arm64' : 'x64'
         commonMain {
             dependencies {
                 implementation 'org.jetbrains.kotlin:kotlin-stdlib-common'
@@ -103,13 +99,13 @@ kotlin {
                 implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime-native:$serialization_version"
 
                 implementation "io.ktor:ktor-client-ios:$ktor_version"
-                implementation "io.ktor:ktor-client-core-ios$iosSuffix:$ktor_version"
-                implementation "io.ktor:ktor-client-json-ios$iosSuffix:$ktor_version"
+                implementation "io.ktor:ktor-client-core-native:$ktor_version"
+                implementation "io.ktor:ktor-client-json-native:$ktor_version"
             }
         }
         iosTest {
             dependencies {
-                implementation "io.ktor:ktor-client-mock-ios$iosSuffix:$ktor_version"
+                implementation "io.ktor:ktor-client-mock-native:$ktor_version"
             }
         }
     }
