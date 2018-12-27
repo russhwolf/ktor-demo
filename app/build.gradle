@@ -2,7 +2,6 @@ repositories {
     google()
     jcenter()
     maven { url 'https://dl.bintray.com/kotlin/kotlinx' }
-    maven { url 'https://dl.bintray.com/kotlin/ktor' }
 }
 apply plugin: 'kotlin-multiplatform'
 apply plugin: 'kotlinx-serialization'
@@ -24,6 +23,9 @@ android {
             minifyEnabled false
         }
     }
+    packagingOptions {
+        exclude 'META-INF/*'
+    }
 }
 
 dependencies {
@@ -43,9 +45,9 @@ kotlin {
         }
     }
     sourceSets {
-        def ktor_version = "1.0.0-beta-4"
-        def coroutine_version = "1.0.1"
-        def serialization_version = "0.9.0"
+        def ktor_version = "1.1.1"
+        def coroutine_version = "1.1.0"
+        def serialization_version = "0.9.1"
         commonMain {
             dependencies {
                 implementation 'org.jetbrains.kotlin:kotlin-stdlib-common'
@@ -96,13 +98,13 @@ kotlin {
                 implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime-native:$serialization_version"
 
                 implementation "io.ktor:ktor-client-ios:$ktor_version"
-                implementation "io.ktor:ktor-client-core-ios:$ktor_version"
-                implementation "io.ktor:ktor-client-json-ios:$ktor_version"
+                implementation "io.ktor:ktor-client-core-iosx64:$ktor_version"
+                implementation "io.ktor:ktor-client-json-iosx64:$ktor_version"
             }
         }
         iosTest {
             dependencies {
-                implementation "io.ktor:ktor-client-mock-ios:$ktor_version"
+                implementation "io.ktor:ktor-client-mock-iosx64:$ktor_version"
             }
         }
     }
@@ -146,5 +148,5 @@ task iosTest {
 }
 
 afterEvaluate { project ->
-    project.tasks['test'].dependsOn iosTest
+    project.tasks['check'].dependsOn iosTest
 }
